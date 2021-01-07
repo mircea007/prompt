@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# ansi color codes
+ANSI_LIME='\[\e[38;5;46m\]'
+ANSI_ORANGE='\[\e[38;5;208m\]'
+ANSI_RED='\[\e[38;5;196m\]'
+ANSI_CYAN='\[\e[38;5;51m\]'
+ANSI_RESET='\[\e[0m\]'
+
+# prints exit status of previous command
+function prompt_prev() {
+  if [[ $LAST_CMD_RET == '0' ]]; then # $LAST_CMD_RET is set in prompt_main()
+    color=$ANSI_LIME
+  else
+    color=$ANSI_RED
+  fi
+  TEMP="$TEMP $color$LAST_CMD_RET$ANSI_RESET"
+}
+
+# print user and hostname
+function prompt_ctx() {
+  TEMP="$TEMP $ANSI_RED$HOSTNAME$ANSI_RESET@$ANSI_RED$USER$ANSI_RESET";
+}
+
+# shows current directory
+function prompt_dir() {
+  TEMP="$TEMP $ANSI_LIME\W$ANSI_RESET"
+}
+
+# shows time (not enabled by default)
+function prompt_time() {
+  TEMP="$TEMP $ANSI_CYAN$(date +$1)$ANSI_RESET"
+}
+
+# adapted from oh-my-zsh agnoster theme
+# prints git info
+function prompt_git() {
+  is_dirty() {
+    test -n "$(git status --porcelain --ignore-submodules)"
+  }
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    ref="$(git branch --show-current)"
+    if is_dirty; then
+      color=$ANSI_ORANGE
+      ref="${ref} $(printf '\u00b1')"
+    else
+      color=$ANSI_LIME
+      ref="${ref} ✓"
+    fi
+    if [[ "${ref/.../}" == "$ref" ]]; then
+      ref="$(printf '\ue0a0') $ref"
+    else
+      ref="$(printf '\u27a6') ${ref/.../}"
+    fi
+
+    TEMP="$TEMP $color$ref$ANSI_RESET"
+  fi
+}
+
+# ads finishing touches to the prompt
+function prompt_finish() {
+  TEMP="[${TEMP:1}]$ " # remove space at begining (so that the printed info can be permutated in any order)
+}
+
+# builds prompt and sotores it $PS1
+function prompt_main() {
+  LAST_CMD_RET=$?
+
+  TEMP=""
+  prompt_prev
+  prompt_ctx
+  prompt_dir
+  prompt_git
+  #prompt_time "%R"
+  prompt_finish
+  PS1=$TEMP
+}
+
+export PROMPT_COMMAND="prompt_main"
