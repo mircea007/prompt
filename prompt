@@ -18,6 +18,15 @@ function prompt_prev() {
   TEMP="$TEMP $color$LAST_CMD_RET$ANSI_RESET"
 }
 
+# prints success of previous command (with happy/sad face emoticon) (not enabled by default)
+function prompt_smiley() {
+  if [[ $LAST_CMD_RET == '0' ]]; then # $LAST_CMD_RET is set in prompt_main()
+    TEMP="$TEMP $ANSI_LIME:)$ANSI_RESET"
+  else
+    TEMP="$TEMP $ANSI_RED:($ANSI_RESET"
+  fi
+}
+
 # print user and hostname
 function prompt_ctx() {
   TEMP="$TEMP $ANSI_RED$HOSTNAME$ANSI_RESET@$ANSI_RED$USER$ANSI_RESET";
@@ -31,6 +40,11 @@ function prompt_dir() {
 # shows time (not enabled by default)
 function prompt_time() {
   TEMP="$TEMP $ANSI_CYAN$(date +$1)$ANSI_RESET"
+}
+
+# prints shell (not enabled by default)
+function prompt_shell() {
+  TEMP="$TEMP $ANSI_CYAN$(basename $SHELL)$ANSI_RESET"
 }
 
 # adapted from oh-my-zsh agnoster theme
@@ -65,9 +79,11 @@ function prompt_finish() {
 
 # builds prompt and sotores it $PS1
 function prompt_main() {
-  LAST_CMD_RET=$?
+  LAST_CMD_RET=$? # for prompt_prev/prompt_smiley
 
   TEMP=""
+  #prompt_shell
+  #prompt_smiley
   prompt_prev
   prompt_ctx
   prompt_dir
