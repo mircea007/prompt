@@ -3,7 +3,7 @@ My custom bash prompt
 ## Install
 You can get the prompt by downloading the script (or the repo) and source-ing it from your `.bashrc`.
 ## Screenshots
-![Screenshot](http://github.com/007-Hacked/prompt/screenshot.png "screenshot")
+![Screenshot](https://raw.githubusercontent.com/007-Hacked/prompt/main/screenshot.png "screenshot")
 ## Configuration
 You can configure the prompt by editing the `prompt_main()` function in the script.
 To exclude something comment the coresponding line (add a `#` at the begining of the line).
