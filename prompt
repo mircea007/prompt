@@ -84,11 +84,11 @@ function prompt_main() {
   TEMP=""
   #prompt_shell
   #prompt_smiley
+  prompt_time "%R"
   prompt_prev
   prompt_ctx
   prompt_dir
   prompt_git
-  #prompt_time "%R"
   prompt_finish
   PS1=$TEMP
 }
