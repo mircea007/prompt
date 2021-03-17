@@ -29,7 +29,7 @@ function prompt_smiley() {
 
 # print user and hostname
 function prompt_ctx() {
-  TEMP="$TEMP $ANSI_RED$HOSTNAME$ANSI_RESET@$ANSI_RED$USER$ANSI_RESET";
+  TEMP="$TEMP $ANSI_RED$USER$ANSI_RESET@$ANSI_RED$HOSTNAME$ANSI_RESET";
 }
 
 # shows current directory
